@@ -10,6 +10,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+
+    env:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      CLIENTID: ${{ secrets.CLIENTID }}
+      CLIENTSECRET: ${{ secrets.CLIENTSECRET }}
+      ID_TOKEN: ${{ secrets.ID_TOKEN }}
+      REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+      SCRIPTID: ${{ secrets.SCRIPTID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,9 +29,36 @@ jobs:
         run: |
           npm init -y
           npm i clasp -g
-      - name: Create clasprc.json
+      - name: Create .clasprc.json
         run: |
-          echo \{\"token\":\{\"access_token\":\"${{ secrets.ACCESS_TOKEN}}\",\"scope\":\"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/script.webapp.deploy https://www.googleapis.com/auth/logging.read openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/script.deployments https://www.googleapis.com/auth/service.management https://www.googleapis.com/auth/cloud-platform\",\"token_type\":\"Bearer\",\"id_token\":\"${{ secrets.ID_TOKEN }}\",\"expiry_date\":1620870307822,\"refresh_token\":\"${{ secrets.REFRESH_TOKEN }}\"\},\"oauth2ClientSettings\":\{\"clientId\":\"${{ secrets.CLIENTID }}\",\"clientSecret\":\"${{ secrets.CLIENTSECRET }}\",\"redirectUri\":\"http://localhost\"\},\"isLocalCreds\":false\} > ~/.clasprc.json
+          echo $(cat <<-EOS
+          {
+            "token": {
+              "access_token": "${ACCESS_TOKEN}",
+              "scope": "https://www.googleapis.com/auth/script.deployments https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/drive.file openid https://www.googleapis.com/auth/service.management https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/logging.read https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/script.webapp.deploy",
+              "token_type": "Bearer",
+              "id_token": "${ID_TOKEN}",
+              "expiry_date": 1697293156057,
+              "refresh_token": "${REFRESH_TOKEN}"
+            },
+            "oauth2ClientSettings": {
+              "clientId": "${CLIENTID}",
+              "clientSecret": "${CLIENTSECRET}",
+              "redirectUri": "http://localhost"
+            },
+            "isLocalCreds": false
+          }
+          EOS
+          ) > ~/.clasprc.json
+      - name: Create .clasp.json
+        run: |
+          echo $(cat <<-EOS
+          {
+            "scriptId": "${SCRIPTID}",
+            "rootDir": "./src"
+          }
+          EOS
+          ) > ./.clasp.json
       - name: Deploy
         run: |
           clasp push
