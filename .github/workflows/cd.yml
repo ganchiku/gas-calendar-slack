@@ -13,11 +13,11 @@ jobs:
 
     env:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      CLIENTID: ${{ secrets.CLIENTID }}
-      CLIENTSECRET: ${{ secrets.CLIENTSECRET }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       ID_TOKEN: ${{ secrets.ID_TOKEN }}
       REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-      SCRIPTID: ${{ secrets.SCRIPTID }}
+      SCRIPT_ID: ${{ secrets.SCRIPT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -42,8 +42,8 @@ jobs:
               "refresh_token": "${REFRESH_TOKEN}"
             },
             "oauth2ClientSettings": {
-              "clientId": "${CLIENTID}",
-              "clientSecret": "${CLIENTSECRET}",
+              "clientId": "${CLIENT_ID}",
+              "clientSecret": "${CLIENT_SECRET}",
               "redirectUri": "http://localhost"
             },
             "isLocalCreds": false
@@ -54,7 +54,7 @@ jobs:
         run: |
           echo $(cat <<-EOS
           {
-            "scriptId": "${SCRIPTID}",
+            "scriptId": "${SCRIPT_ID}",
             "rootDir": "./src"
           }
           EOS
