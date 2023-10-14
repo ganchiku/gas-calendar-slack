@@ -4,8 +4,8 @@ function test() {
     Logger.log('Hello GitHub Actions Deploy!');
 
     let slackApp = SlackApp.create( prop.SLACK_TOKEN);
-    let slackChannelId = prop.SLCK_CHANNEL_ID;
-    Logger.Log(slackChannelId);
+    let slackChannelId = prop.SLACK_CHANNEL_ID;
+    Logger.log(slackChannelId);
 
     let myCalendar = CalendarApp.getCalendarById(prop.CALENDAR_ID )
     let now = new Date();
