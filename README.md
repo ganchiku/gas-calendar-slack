@@ -1,15 +1,33 @@
 # gas-calendar-slack
 
-This is easy script for integration of GSA + Google Calendar + Slack.
+This is an easy-to-use script for integrating Google Apps Script (GAS), Google Calendar, and Slack for personal use. For more robust development, consider using [Google's official library, Aside]( https://github.com/google/aside).
 
+## Installation
+```bash
+$ git clone git@github.com:ganchiku/gas-calendar-slack.git
+```
 
-## How to handle credentials.
+To get started, you'll need to set up clasp, which is the Google Apps Script command-line tool. You can find it [here](https://github.com/google/clasp). After installing clasp, run the following commands:
 
-Please do not commit any credentails to repository. Please treat them carefully.
+``` bash
+$ clasp login --no-localhost
+```
+This will generate a file at `$HOME/.clasprc.json`. Please set the values in this file as GitHub Secrets.
 
-### Credentials for deployments
+## Slack App prepartion
+Before using this script, you'll need to create a Slack app for Bots and grant the app permission to post Slack messages. Make sure to set the following scopes for your Slack app:
 
-Please store the credentails in GitHub Secrets, and use them from GitHub Action to deploy GSA. Following variables are refered in GitHub actions to deploy GSA script.
+- chat:write
+- chat:write.customize
+- chat:write:public
+
+## Handling Credentials
+
+**Important:** Do not commit any credentials to your repository. Treat them with care.
+
+### Credentials for Deployments
+
+To deploy your Google Apps Script (GSA), store the credentials in GitHub Secrets. The following variables are referenced in GitHub Actions to deploy the GSA script:
 
 | KEY | VALUE |
 | --- | --- |
@@ -23,7 +41,7 @@ Please store the credentails in GitHub Secrets, and use them from GitHub Action 
 
 ### Credentials for application 
 
-Please store the credentails in GSA Property manually. Maybe there are better way, but for simple and easy use, it is good enough.
+For application use, store the credentials in GSA Property manually. While there may be better ways to manage credentials, this approach is simple and straightforward. Use the following Script Properties:
 
 **Script Properties**
 | Property | Value |
@@ -32,20 +50,20 @@ Please store the credentails in GSA Property manually. Maybe there are better wa
 | SLACK_CHANNEL_ID | XXXX |
 | SLACK_TOKEN | xoxb-XXXXXX |
 
-* You can call Property Service by GSA, but who initiate the GSA then...
-
-## How to set trigger
-
-Please set trigger for `Time-driven`, `Minutes Timer` and `Every minute` with `main` function manually.
-
-| Field | Value |
-| --- | --- |
-| Choose which function to run | main |
-| Choose which deployment should run | Head |
-| Select Event source | Time-driven |
-| Select type of time based trigger | Minutes Timer |
-| Select minute interval | Every minute |
+* You can call the Property Service within GSA, but consider who initiates the GSA script.
 
 
- * You can call ScriptApp to create trigger, but who run the script? Maybe you can run the script by `clasp run` in GitHub Action.
+## Setting Triggers
+To automate your script, set up a trigger with the following configuration:
+
+- Trigger Type: Time-driven
+- Function to Run: main
+- Deployment: Head
+- Event Source: Time-driven
+- Type of Time-based Trigger: Minutes Timer
+- Minute Interval: Every minute
+
+
+ * You can also use `ScriptApp` to create a trigger, but consider who will run the script. In some cases, you can run the script using `clasp run` in a GitHub Action workflow.
+
 
