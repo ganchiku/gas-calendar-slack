@@ -66,4 +66,7 @@ To automate your script, set up a trigger with the following configuration:
 
  * You can also use `ScriptApp` to create a trigger, but consider who will run the script. In some cases, you can run the script using `clasp run` in a GitHub Action workflow.
 
-
+## Reference
+- [GitHub Actionsを使ってGASをデプロイしてみた
+](https://dev.classmethod.jp/articles/github-actions-gas-deploy/)
+- [Googleカレンダーの特定の予定を3分前にSlackへ通知する方法](https://www.service.andonuts.jp/posts/slack-bot-calender)
